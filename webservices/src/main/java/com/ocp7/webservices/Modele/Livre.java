@@ -23,6 +23,9 @@ public class Livre {
     @Column(name="disponibilite")
     private int disponibilite;
 
+    @Column(name="quantite")
+    private int quantite;
+
     public int getId() {
         return livreId;
     }
@@ -63,6 +66,14 @@ public class Livre {
         this.categorie = categorie;
     }
 
+    public int getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(int quantite) {
+        this.quantite = quantite;
+    }
+
     public Livre() {
     }
 
@@ -74,6 +85,7 @@ public class Livre {
                 ", description='" + description + '\'' +
                 ", categorie='" + categorie + '\'' +
                 ", disponibilite=" + disponibilite +
+                ", quantite=" + quantite +
                 '}';
     }
 }
