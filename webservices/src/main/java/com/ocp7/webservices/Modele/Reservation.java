@@ -16,8 +16,9 @@ public class Reservation {
     @Column(name="statut")
     private String statut;
 
-    @Column(name="nom_livre")
-    private String nomLivre;
+    @ManyToOne
+    @JoinColumn(name="livre_id")
+    private Livre livre;
 
     @Column(name="utilisateur")
     private String utilisateur;
