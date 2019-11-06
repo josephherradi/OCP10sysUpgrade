@@ -42,6 +42,14 @@
 
                         		<br>
 
+             		<div style="text-align: left">
+                                     				<a
+                                     					href="http://localhost:8082/userReservations"
+                                     					class="button medium hpbottom">Mes réservations</a>
+                                     			</div>
+
+                             		<br>
+
 
 			<h2>ma liste des prets</h2>
 

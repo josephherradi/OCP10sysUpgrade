@@ -49,6 +49,9 @@ public class Reservation {
         this.statut = statut;
     }
 
+    public String getLivre() {
+        return livre;
+    }
 
     public void setLivre(String livre) {
         this.livre = livre;

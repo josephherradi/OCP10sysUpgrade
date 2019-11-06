@@ -70,12 +70,21 @@
 				</tr>
 
 				<c:forEach var="tempLivres" items="${livresList}">
+				<c:url var="reservationLink"
+                                						value="livre/${tempLivres.id}/reservation/showFormResa">
+                                					</c:url>
 
 					<tr>
 						<td>${tempLivres.nom}</td>
 						<td>${tempLivres.description}</td>
 						<td>${tempLivres.categorie}</td>
 						<td>${tempLivres.disponibilite}</td>
+
+					    <c:if test="${tempLivres.disponibilite==0}" var="variable">
+
+                        <td><a href="${reservationLink}">Réservation</a></td>
+
+                        </c:if>
 					</tr>
 				</c:forEach>
 			</table>
