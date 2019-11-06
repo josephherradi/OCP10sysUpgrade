@@ -12,6 +12,6 @@ public interface ReservationDAO extends JpaRepository<Reservation,Integer> {
     @Query("select r from Reservation r where r.utilisateur= :user")
     Optional<List<Reservation>> findByUtilisateur(@Param("user") String utilisateur);
 
-    @Query("select r from Reservation r where r.livre.nom= :bookName")
+    @Query("select r from Reservation r where r.livre= :bookName")
     Optional<List<Reservation>> findByLivre(@Param("bookName") String livre);
 }

@@ -1,28 +1,13 @@
-package com.ocp7.webservices.Modele;
+package com.ocp7.clientlecteurs.beans;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name="reservation")
-public class Reservation {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+public class ReservationBean {
     private int reservationId;
-
-    @Column(name="dateDemande",updatable = false)
     private Date dateDemande;
-
-    @Column(name="statut")
     private String statut;
-
-    @Column(name="livre")
     private String livre;
-
-    @Column(name="utilisateur")
     private String utilisateur;
-
-    @Column(name="numListeAttente")
     private String numListeAttente;
 
     public int getReservationId() {
@@ -49,12 +34,13 @@ public class Reservation {
         this.statut = statut;
     }
 
+    public String getLivre() {
+        return livre;
+    }
 
     public void setLivre(String livre) {
         this.livre = livre;
     }
-
-
 
     public String getUtilisateur() {
         return utilisateur;
@@ -72,13 +58,14 @@ public class Reservation {
         this.numListeAttente = numListeAttente;
     }
 
+
     @Override
     public String toString() {
-        return "Reservation{" +
+        return "ReservationBean{" +
                 "reservationId=" + reservationId +
                 ", dateDemande=" + dateDemande +
                 ", statut='" + statut + '\'' +
-                ", livre=" + livre +
+                ", livre='" + livre + '\'' +
                 ", utilisateur='" + utilisateur + '\'' +
                 ", numListeAttente='" + numListeAttente + '\'' +
                 '}';
