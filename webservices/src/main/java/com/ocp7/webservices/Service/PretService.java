@@ -10,5 +10,7 @@ public interface PretService {
     public Pret get(int theId);
     public void delete(int theId);
     public List<Pret> userPrets(String utilisateur);
+    public Pret pretRetourPlusProche(String livre);
+
 
 }

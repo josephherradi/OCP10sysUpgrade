@@ -31,7 +31,7 @@ public class ReservationController {
         String utilisateur = (String) request.getSession().getAttribute("user");
         laReservationBean.setUtilisateur(utilisateur);
         reservationMicroserviceProxy.saveReservation(livreId, laReservationBean);
-        return "redirect:/livres";}
+        return "redirect:/userReservations";}
 
 
     @RequestMapping(value = "userReservations", method = RequestMethod.GET)

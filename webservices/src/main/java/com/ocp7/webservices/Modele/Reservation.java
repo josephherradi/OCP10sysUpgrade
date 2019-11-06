@@ -23,7 +23,7 @@ public class Reservation {
     private String utilisateur;
 
     @Column(name="numListeAttente")
-    private String numListeAttente;
+    private int numListeAttente;
 
     public int getReservationId() {
         return reservationId;
@@ -67,11 +67,11 @@ public class Reservation {
         this.utilisateur = utilisateur;
     }
 
-    public String getNumListeAttente() {
+    public int getNumListeAttente() {
         return numListeAttente;
     }
 
-    public void setNumListeAttente(String numListeAttente) {
+    public void setNumListeAttente(int numListeAttente) {
         this.numListeAttente = numListeAttente;
     }
 

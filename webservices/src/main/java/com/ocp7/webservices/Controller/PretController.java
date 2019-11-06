@@ -105,4 +105,9 @@ public class PretController {
         return lePret;
     }
 
+    @GetMapping(value = "pretRetourPlusProche")
+    public Pret pretBackPlusTot(@RequestParam("livre") String livre){
+        return pretService.pretRetourPlusProche(livre);
+
+    }
 }

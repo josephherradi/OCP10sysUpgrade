@@ -12,4 +12,7 @@ import java.util.List;
 public interface PretDAO extends JpaRepository<Pret,Integer> {
     @Query("select p from Pret p where p.utilisateur= :userId")
     List<Pret> findByUtilisateur(@Param("userId") String utilisateur);
+
+    @Query("select p from Pret p where p.nomLivre= :nom")
+    List<Pret> findByBook(@Param("nom") String livre);
 }

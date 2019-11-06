@@ -25,7 +25,13 @@ public class ReservationServiceImpl implements ReservationService {
         laReservation.setLivre(leLivre.getNom());
         laReservation.setDateDemande(new Date());
         laReservation.setStatut("en attente");
-
+        List<Reservation> bookReservations=reservationDAO.findByLivre(leLivre.getNom()).orElse(null);
+        if(bookReservations==null){
+        laReservation.setNumListeAttente(1);
+        } else {
+            Reservation lastResa=bookReservations.get(bookReservations.size()-1);
+            laReservation.setNumListeAttente(lastResa.getNumListeAttente()+1);
+        }
 
         return reservationDAO.save(laReservation);
     }
