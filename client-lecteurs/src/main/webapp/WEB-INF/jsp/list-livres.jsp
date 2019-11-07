@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -62,6 +64,9 @@
 					<th>description</th>
 					<th>categorie</th>
 					<th>disponibilite</th>
+					<th>date retour plus proche</th>
+
+
 
 
 
@@ -79,6 +84,9 @@
 						<td>${tempLivres.description}</td>
 						<td>${tempLivres.categorie}</td>
 						<td>${tempLivres.disponibilite}</td>
+						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${tempLivres.dateRetourPlusProche}" /> </td>
+
+
 
 					    <c:if test="${tempLivres.disponibilite==0}" var="variable">
 

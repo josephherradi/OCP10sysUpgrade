@@ -1,12 +1,16 @@
 package com.ocp7.clientlecteurs.beans;
 
 
+import java.util.Date;
+
 public class LivreBean {
     private int id;
     private String nom;
     private String description;
     private int disponibilite;
     private String categorie;
+    private Date dateRetourPlusProche;
+
 
     public int getId() {
         return id;
@@ -48,6 +52,13 @@ public class LivreBean {
         this.categorie = categorie;
     }
 
+    public Date getDateRetourPlusProche() {
+        return dateRetourPlusProche;
+    }
+
+    public void setDateRetourPlusProche(Date dateRetourPlusProche) {
+        this.dateRetourPlusProche = dateRetourPlusProche;
+    }
 
     public LivreBean() {
     }
@@ -60,6 +71,7 @@ public class LivreBean {
                 ", description='" + description + '\'' +
                 ", disponibilite=" + disponibilite +
                 ", categorie='" + categorie + '\'' +
+                ", dateRetourPlusProche=" + dateRetourPlusProche +
                 '}';
     }
 }

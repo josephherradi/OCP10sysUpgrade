@@ -1,6 +1,7 @@
 package com.ocp7.webservices.Modele;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name="livre")
@@ -25,6 +26,9 @@ public class Livre {
 
     @Column(name="quantite")
     private int quantite;
+
+    @Transient
+    private Date dateRetourPlusProche;
 
     public int getId() {
         return livreId;
@@ -74,7 +78,15 @@ public class Livre {
         this.quantite = quantite;
     }
 
-    public Livre() {
+    public Date getDateRetourPlusProche() {
+        return dateRetourPlusProche;
+    }
+
+    public void setDateRetourPlusProche(Date dateRetourPlusProche) {
+        this.dateRetourPlusProche = dateRetourPlusProche;
+    }
+
+    public Livre() {;
     }
 
     @Override
@@ -86,6 +98,7 @@ public class Livre {
                 ", categorie='" + categorie + '\'' +
                 ", disponibilite=" + disponibilite +
                 ", quantite=" + quantite +
+                ", dateRetourPlusProche=" + dateRetourPlusProche +
                 '}';
     }
 }

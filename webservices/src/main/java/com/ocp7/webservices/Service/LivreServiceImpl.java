@@ -2,19 +2,36 @@ package com.ocp7.webservices.Service;
 
 import com.ocp7.webservices.DAO.LivreDAO;
 import com.ocp7.webservices.Modele.Livre;
+import com.ocp7.webservices.Modele.Pret;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 @Service
 public class LivreServiceImpl implements  LivreService {
     @Autowired
     private LivreDAO livreDAO;
 
+    @Autowired
+    private PretService pretService;
+
     @Override
     public List<Livre> listeLivres() {
-        return livreDAO.findAll();
+        List<Livre> livresList=livreDAO.findAll();
+        ListIterator<Livre> iterator=livresList.listIterator();
+        while (iterator.hasNext()) {
+        Livre l=iterator.next();
+        Pret pretBackPlustot=pretService.pretRetourPlusProche(l.getNom());
+        if(pretBackPlustot==null){
+            l.setDateRetourPlusProche(null);
+        }else{
+        l.setDateRetourPlusProche(pretBackPlustot.getDateRetour());}
+        iterator.set(l);
+        }
+        return livresList;
     }
 
     @Override

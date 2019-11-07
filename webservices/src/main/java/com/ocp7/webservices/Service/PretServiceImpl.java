@@ -45,9 +45,10 @@ public class PretServiceImpl implements PretService {
     @Override
     public Pret pretRetourPlusProche(String livre) {
 
-        List<Pret> listPretsParLivre=pretDAO.findByBook(livre);
-        Pret pretRetourPlusproche= Collections.max(listPretsParLivre, Comparator.comparing(c -> c.getDateRetour()));
-
+        List<Pret> listPretsParLivre=pretDAO.findByLivre(livre).orElse(null);
+        Pret pretRetourPlusproche=null;
+        if(listPretsParLivre!=null){
+        pretRetourPlusproche= Collections.max(listPretsParLivre, Comparator.comparing(c -> c.getDateRetour()));}
         return pretRetourPlusproche;
     }
 
