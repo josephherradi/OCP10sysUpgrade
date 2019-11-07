@@ -10,6 +10,8 @@ public class LivreBean {
     private int disponibilite;
     private String categorie;
     private Date dateRetourPlusProche;
+    private int nbrReservations;
+
 
 
     public int getId() {
@@ -60,6 +62,14 @@ public class LivreBean {
         this.dateRetourPlusProche = dateRetourPlusProche;
     }
 
+    public int getNbrReservations() {
+        return nbrReservations;
+    }
+
+    public void setNbrReservations(int nbrReservations) {
+        this.nbrReservations = nbrReservations;
+    }
+
     public LivreBean() {
     }
 
@@ -72,6 +82,7 @@ public class LivreBean {
                 ", disponibilite=" + disponibilite +
                 ", categorie='" + categorie + '\'' +
                 ", dateRetourPlusProche=" + dateRetourPlusProche +
+                ", nbrReservations=" + nbrReservations +
                 '}';
     }
 }

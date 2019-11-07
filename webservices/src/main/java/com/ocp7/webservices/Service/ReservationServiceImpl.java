@@ -3,6 +3,7 @@ package com.ocp7.webservices.Service;
 import com.ocp7.webservices.DAO.LivreDAO;
 import com.ocp7.webservices.DAO.ReservationDAO;
 import com.ocp7.webservices.Modele.Livre;
+import com.ocp7.webservices.Modele.Pret;
 import com.ocp7.webservices.Modele.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -18,6 +20,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     private LivreDAO livreDAO;
+
+    @Autowired
+    private  PretService pretService;
 
     @Override
     public Reservation saveReservation(Integer livreId, Reservation laReservation) {
@@ -38,7 +43,19 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public @ResponseBody List<Reservation> utilisateurReservations(String utilisateur) {
-        return reservationDAO.findByUtilisateur(utilisateur).orElse(null);
+        List<Reservation> userResas=reservationDAO.findByUtilisateur(utilisateur).orElse(null);
+        ListIterator<Reservation> iterator=userResas.listIterator();
+        while (iterator.hasNext()){
+            Reservation r=iterator.next();
+            Pret pretBackPlustot=pretService.pretRetourPlusProche(r.getLivre());
+            if(pretBackPlustot==null) {
+                r.setDateRetourPlusProche(null);
+            } else {
+                r.setDateRetourPlusProche(pretBackPlustot.getDateRetour());
+            }
+            iterator.set(r);
+            }
+        return userResas;
     }
 
     @Override

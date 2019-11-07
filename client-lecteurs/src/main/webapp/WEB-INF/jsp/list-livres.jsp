@@ -65,6 +65,8 @@
 					<th>categorie</th>
 					<th>disponibilite</th>
 					<th>date retour plus proche</th>
+					<th>nombre réservations</th>
+
 
 
 
@@ -85,6 +87,8 @@
 						<td>${tempLivres.categorie}</td>
 						<td>${tempLivres.disponibilite}</td>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${tempLivres.dateRetourPlusProche}" /> </td>
+						<td>${tempLivres.nbrReservations}</td>
+
 
 
 

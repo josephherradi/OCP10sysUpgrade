@@ -9,6 +9,7 @@ public class ReservationBean {
     private String livre;
     private String utilisateur;
     private String numListeAttente;
+    private Date dateRetourPlusProche;
 
     public int getReservationId() {
         return reservationId;
@@ -58,6 +59,13 @@ public class ReservationBean {
         this.numListeAttente = numListeAttente;
     }
 
+    public Date getDateRetourPlusProche() {
+        return dateRetourPlusProche;
+    }
+
+    public void setDateRetourPlusProche(Date dateRetourPlusProche) {
+        this.dateRetourPlusProche = dateRetourPlusProche;
+    }
 
     @Override
     public String toString() {
@@ -68,6 +76,7 @@ public class ReservationBean {
                 ", livre='" + livre + '\'' +
                 ", utilisateur='" + utilisateur + '\'' +
                 ", numListeAttente='" + numListeAttente + '\'' +
+                ", dateRetourPlusProche=" + dateRetourPlusProche +
                 '}';
     }
 }

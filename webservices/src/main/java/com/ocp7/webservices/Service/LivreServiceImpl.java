@@ -3,6 +3,7 @@ package com.ocp7.webservices.Service;
 import com.ocp7.webservices.DAO.LivreDAO;
 import com.ocp7.webservices.Modele.Livre;
 import com.ocp7.webservices.Modele.Pret;
+import com.ocp7.webservices.Modele.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,9 @@ public class LivreServiceImpl implements  LivreService {
     @Autowired
     private PretService pretService;
 
+    @Autowired
+    private ReservationService reservationService;
+
     @Override
     public List<Livre> listeLivres() {
         List<Livre> livresList=livreDAO.findAll();
@@ -29,8 +33,16 @@ public class LivreServiceImpl implements  LivreService {
             l.setDateRetourPlusProche(null);
         }else{
         l.setDateRetourPlusProche(pretBackPlustot.getDateRetour());}
-        iterator.set(l);
+        List<Reservation> livreResas=reservationService.livreReservations(l.getNom());
+        if(livreResas==null){
+            l.setNbrReservations(0);
+        } else {
+            l.setNbrReservations(livreResas.size());
         }
+            iterator.set(l);
+        }
+
+
         return livresList;
     }
 

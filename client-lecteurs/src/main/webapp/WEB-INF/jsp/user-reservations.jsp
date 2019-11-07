@@ -35,6 +35,8 @@
 					<th> Livre demandé</th>
 					<th>statut réservation</th>
 					<th>numero liste attente</th>
+					<th>date retour plus proche</th>
+
 
 
 
@@ -51,6 +53,8 @@
 						<td>${userReservations.livre}</td>
 						<td>${userReservations.statut}</td>
 						<td>${userReservations.numListeAttente}</td>
+						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${userReservations.dateRetourPlusProche}" /></td>
+
 
 					</tr>
 				</c:forEach>

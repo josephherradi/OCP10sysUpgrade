@@ -25,6 +25,9 @@ public class Reservation {
     @Column(name="numListeAttente")
     private int numListeAttente;
 
+    @Transient
+    private  Date dateRetourPlusProche;
+
     public int getReservationId() {
         return reservationId;
     }
@@ -75,15 +78,24 @@ public class Reservation {
         this.numListeAttente = numListeAttente;
     }
 
+    public Date getDateRetourPlusProche() {
+        return dateRetourPlusProche;
+    }
+
+    public void setDateRetourPlusProche(Date dateRetourPlusProche) {
+        this.dateRetourPlusProche = dateRetourPlusProche;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
                 "reservationId=" + reservationId +
                 ", dateDemande=" + dateDemande +
                 ", statut='" + statut + '\'' +
-                ", livre=" + livre +
+                ", livre='" + livre + '\'' +
                 ", utilisateur='" + utilisateur + '\'' +
-                ", numListeAttente='" + numListeAttente + '\'' +
+                ", numListeAttente=" + numListeAttente +
+                ", dateRetourPlusProche=" + dateRetourPlusProche +
                 '}';
     }
 }
