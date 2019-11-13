@@ -14,5 +14,6 @@ public class MailBatchItemWriter  implements ItemWriter<MimeMessage> {
     @Override
     public void write(List<? extends MimeMessage> messages) throws Exception {
         messages.stream().forEach((message)->mailSender.send(message));
+
     }
 }

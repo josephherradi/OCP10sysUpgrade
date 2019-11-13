@@ -49,12 +49,12 @@ public class BatchConfiguration {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/OCP7DB2?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC");
         dataSource.setUsername("root");
-        dataSource.setPassword("");
+        dataSource.setPassword("root");
 
         return dataSource;
     }
     @Bean
-    public JdbcCursorItemReader<Pret> pretReader(){
+    public JdbcCursorItemReader<Pret> reader(){
         JdbcCursorItemReader<Pret> reader = new JdbcCursorItemReader<Pret>();
         reader.setDataSource(dataSource);
         reader.setSql("select a.id ,a.date_pret,a.date_retour,a.nom_livre,a.utilisateur, b.mail from " +
@@ -64,30 +64,14 @@ public class BatchConfiguration {
         return reader;
     }
 
-    @Bean
-    public JdbcCursorItemReader<Reservation> reservationReader(){
-        JdbcCursorItemReader<Reservation> reader = new JdbcCursorItemReader<Reservation>();
-        reader.setDataSource(dataSource);
-        reader.setSql("select a.date_retour,a.nom_livre,c.utilisateur,c.num_liste_attente,c.statut, b.mail from pret  a " +
-                "inner join reservation c on a.nom_livre=c.livre inner join utilisateur b on b.identifiant=c.utilisateur where rendu=true");
-        reader.setRowMapper(new ReservationRowMapper());
-
-        return reader;
-    }
-
 
     @Bean
-    public PretItemProcessor pretProcessor(){
+    public PretItemProcessor processor(){
         return new PretItemProcessor(sender,attachment);
     }
 
     @Bean
-    public ReservationItemProcessor reservationProcessor(){
-        return new ReservationItemProcessor(sender,attachment);
-    }
-
-    @Bean
-    public MailBatchItemWriter pretWriter() {
+    public MailBatchItemWriter writer() {
         MailBatchItemWriter writer = new MailBatchItemWriter();
         return writer;
     }
@@ -95,9 +79,9 @@ public class BatchConfiguration {
     @Bean
     public Step step1(){
         return stepBuilderFactory.get("step1").<Pret,MimeMessage> chunk(10)
-                .reader(pretReader())
-                .processor(pretProcessor())
-                .writer(pretWriter())
+                .reader(reader())
+                .processor(processor())
+                .writer(writer())
                 .build();
     }
 
@@ -110,7 +94,7 @@ public class BatchConfiguration {
                 .build();
     }
 
-    @Scheduled(cron = "0 0 * * * * ")
+    @Scheduled(cron = "*/10 * * * * *")
     public void perform() throws Exception {
 
         System.out.println("Job Started at :" + new Date());
@@ -123,6 +107,12 @@ public class BatchConfiguration {
         System.out.println("Job finished with status :" + execution.getStatus());
     }
 
+/*    @Bean
+    public SimpleJobLauncher jobLauncher(JobRepository jobRepository) {
+        SimpleJobLauncher launcher = new SimpleJobLauncher();
+        launcher.setJobRepository(jobRepository);
+        return launcher;
+    }*/
 
 
 }

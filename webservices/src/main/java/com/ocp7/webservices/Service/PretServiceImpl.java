@@ -48,7 +48,7 @@ public class PretServiceImpl implements PretService {
         List<Pret> listPretsParLivre=pretDAO.findByLivre(livre).orElse(null);
         Pret pretRetourPlusproche=null;
         if(listPretsParLivre!=null){
-        pretRetourPlusproche= Collections.min(listPretsParLivre, Comparator.comparing(c -> c.getDateRetour()));}
+        pretRetourPlusproche= Collections.max(listPretsParLivre, Comparator.comparing(c -> c.getDateRetour()));}
         return pretRetourPlusproche;
     }
 

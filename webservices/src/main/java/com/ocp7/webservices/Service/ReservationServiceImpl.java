@@ -34,7 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
         if(bookReservations==null){
         laReservation.setNumListeAttente(1);
         } else {
-            Reservation lastResa=bookReservations.get(0);
+            Reservation lastResa=bookReservations.get(bookReservations.size()-1);
             laReservation.setNumListeAttente(lastResa.getNumListeAttente()+1);
         }
 
