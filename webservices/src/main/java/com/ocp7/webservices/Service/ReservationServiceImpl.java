@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -34,7 +32,7 @@ public class ReservationServiceImpl implements ReservationService {
         if(bookReservations==null){
         laReservation.setNumListeAttente(1);
         } else {
-            Reservation lastResa=bookReservations.get(bookReservations.size()-1);
+            Reservation lastResa= Collections.max(bookReservations, Comparator.comparing(s -> s.getNumListeAttente()));
             laReservation.setNumListeAttente(lastResa.getNumListeAttente()+1);
         }
 
