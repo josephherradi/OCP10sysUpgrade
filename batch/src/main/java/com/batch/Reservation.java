@@ -1,16 +1,36 @@
-package com.ocp7.clientlecteurs.beans;
+package com.batch;
 
+import javax.persistence.*;
 import java.util.Date;
 
-public class ReservationBean {
+@Entity
+@Table(name="reservation")
+public class Reservation {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int reservationId;
+
+    @Column(name="dateDemande",updatable = false)
     private Date dateDemande;
+
+    @Column(name="statut")
     private String statut;
+
+    @Column(name="livre")
     private String livre;
+
+    @Column(name="utilisateur")
     private String utilisateur;
-    private String numListeAttente;
-    private Date dateRetourPlusProche;
+
+    @Column(name="numListeAttente")
+    private int numListeAttente;
+
+    @Transient
+    private  Date dateRetourPlusProche;
+
+    @Column(name="notified")
     private Boolean notified;
+
 
     public int getReservationId() {
         return reservationId;
@@ -44,6 +64,8 @@ public class ReservationBean {
         this.livre = livre;
     }
 
+
+
     public String getUtilisateur() {
         return utilisateur;
     }
@@ -52,11 +74,11 @@ public class ReservationBean {
         this.utilisateur = utilisateur;
     }
 
-    public String getNumListeAttente() {
+    public int getNumListeAttente() {
         return numListeAttente;
     }
 
-    public void setNumListeAttente(String numListeAttente) {
+    public void setNumListeAttente(int numListeAttente) {
         this.numListeAttente = numListeAttente;
     }
 
@@ -68,6 +90,7 @@ public class ReservationBean {
         this.dateRetourPlusProche = dateRetourPlusProche;
     }
 
+
     public Boolean getNotified() {
         return notified;
     }
@@ -78,13 +101,13 @@ public class ReservationBean {
 
     @Override
     public String toString() {
-        return "ReservationBean{" +
+        return "Reservation{" +
                 "reservationId=" + reservationId +
                 ", dateDemande=" + dateDemande +
                 ", statut='" + statut + '\'' +
                 ", livre='" + livre + '\'' +
                 ", utilisateur='" + utilisateur + '\'' +
-                ", numListeAttente='" + numListeAttente + '\'' +
+                ", numListeAttente=" + numListeAttente +
                 ", dateRetourPlusProche=" + dateRetourPlusProche +
                 ", notified=" + notified +
                 '}';

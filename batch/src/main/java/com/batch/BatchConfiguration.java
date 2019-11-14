@@ -6,15 +6,11 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
-import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.mail.internet.MimeMessage;
@@ -43,16 +39,7 @@ public class BatchConfiguration {
     private String attachment;
 
 
-    @Bean
-    public DataSource dataSource() {
-        final DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/OCP7DB2?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC");
-        dataSource.setUsername("root");
-        dataSource.setPassword("root");
 
-        return dataSource;
-    }
     @Bean
     public JdbcCursorItemReader<Pret> reader(){
         JdbcCursorItemReader<Pret> reader = new JdbcCursorItemReader<Pret>();
@@ -94,7 +81,6 @@ public class BatchConfiguration {
                 .build();
     }
 
-    @Scheduled(cron = "*/10 * * * * *")
     public void perform() throws Exception {
 
         System.out.println("Job Started at :" + new Date());
@@ -107,12 +93,6 @@ public class BatchConfiguration {
         System.out.println("Job finished with status :" + execution.getStatus());
     }
 
-/*    @Bean
-    public SimpleJobLauncher jobLauncher(JobRepository jobRepository) {
-        SimpleJobLauncher launcher = new SimpleJobLauncher();
-        launcher.setJobRepository(jobRepository);
-        return launcher;
-    }*/
 
 
 }

@@ -25,6 +25,9 @@ public class Reservation {
     @Column(name="numListeAttente")
     private int numListeAttente;
 
+    @Column(name="notified",nullable = false)
+    private Boolean notified =false;
+
     @Transient
     private  Date dateRetourPlusProche;
 
@@ -86,6 +89,14 @@ public class Reservation {
         this.dateRetourPlusProche = dateRetourPlusProche;
     }
 
+    public Boolean getNotified() {
+        return notified;
+    }
+
+    public void setNotified(Boolean notified) {
+        this.notified = notified;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -95,6 +106,7 @@ public class Reservation {
                 ", livre='" + livre + '\'' +
                 ", utilisateur='" + utilisateur + '\'' +
                 ", numListeAttente=" + numListeAttente +
+                ", notified=" + notified +
                 ", dateRetourPlusProche=" + dateRetourPlusProche +
                 '}';
     }

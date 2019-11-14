@@ -1,6 +1,9 @@
 package com.batch;
 
+
+
 import java.util.Date;
+
 
 public class Pret {
     private int id;
@@ -70,6 +73,7 @@ public class Pret {
     public void setMail(String mail) {
         this.mail = mail;
     }
+
 }
 
 
