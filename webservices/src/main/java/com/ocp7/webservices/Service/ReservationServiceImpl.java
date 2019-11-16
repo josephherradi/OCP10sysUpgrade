@@ -28,6 +28,7 @@ public class ReservationServiceImpl implements ReservationService {
         laReservation.setLivre(leLivre.getNom());
         laReservation.setDateDemande(new Date());
         laReservation.setStatut("en attente");
+        laReservation.setNotified(Boolean.FALSE);
         List<Reservation> bookReservations=reservationDAO.findByLivre(leLivre.getNom()).orElse(null);
         if(bookReservations==null){
         laReservation.setNumListeAttente(1);
