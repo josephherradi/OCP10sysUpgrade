@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.internet.MimeMessage;
 import java.util.List;
+import java.util.ListIterator;
 
 
 @Component
@@ -19,6 +20,9 @@ public class ReservationsBatch {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Autowired
+    private PretDAO pretDAO;
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -56,6 +60,16 @@ public class ReservationsBatch {
 
         } catch (NullPointerException e){
             System.out.println("pas de mail à envoyer");
+        }
+
+        List<Integer> resaToStatutUpdate=pretDAO.resaToUpdate();
+        ListIterator<Integer> iterator=resaToStatutUpdate.listIterator();
+        while (iterator.hasNext()){
+            Integer i= iterator.next();
+            Reservation reservationToUpdate=reservationDAO.findById(i).orElse(null);
+            reservationToUpdate.setStatut("Accepte");
+            reservationDAO.save(reservationToUpdate);
+
         }
 
 
