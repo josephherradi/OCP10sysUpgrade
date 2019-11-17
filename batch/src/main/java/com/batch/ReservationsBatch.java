@@ -31,14 +31,18 @@ public class ReservationsBatch {
     @Scheduled(cron = "*/10 * * * * *")
     public void bookingBatch() throws Exception{
 
+        List<ReservationProjection> resasList=reservationDAO.customQuery();
         ReservationBean laReservation=new ReservationBean();
-        try{
-            laReservation.setReservation_Id(reservationDAO.customQuery().getReservation_Id());
-            laReservation.setNum_Liste_Attente(reservationDAO.customQuery().getNum_Liste_Attente());
-            laReservation.setNom(reservationDAO.customQuery().getNom());
-            laReservation.setUtilisateur(reservationDAO.customQuery().getUtilisateur());
-            laReservation.setMail(reservationDAO.customQuery().getMail());
-            laReservation.setStatut(reservationDAO.customQuery().getStatut());
+        ListIterator<ReservationProjection> iterator=resasList.listIterator();
+
+        while (iterator.hasNext()) {
+            ReservationProjection r=iterator.next();
+            laReservation.setReservation_Id(r.getReservation_Id());
+            laReservation.setNum_Liste_Attente(r.getNum_Liste_Attente());
+            laReservation.setNom(r.getNom());
+            laReservation.setUtilisateur(r.getUtilisateur());
+            laReservation.setMail(r.getMail());
+            laReservation.setStatut(r.getStatut());
 
 
             MimeMessage message = mailSender.createMimeMessage();
@@ -53,19 +57,18 @@ public class ReservationsBatch {
 
             mailSender.send(message);
 
-            Reservation resa = reservationDAO.findById(reservationDAO.customQuery().getReservation_Id()).orElse(null);
+            Reservation resa = reservationDAO.findById(r.getReservation_Id()).orElse(null);
             resa.setNotified(Boolean.TRUE);
             resa.setStatut("Annule");
             reservationDAO.save(resa);
-
-        } catch (NullPointerException e){
-            System.out.println("pas de mail à envoyer");
         }
 
+
+
         List<Integer> resaToStatutUpdate=pretDAO.resaToUpdate();
-        ListIterator<Integer> iterator=resaToStatutUpdate.listIterator();
+        ListIterator<Integer> iterator2=resaToStatutUpdate.listIterator();
         while (iterator.hasNext()){
-            Integer i= iterator.next();
+            Integer i= iterator2.next();
             Reservation reservationToUpdate=reservationDAO.findById(i).orElse(null);
             reservationToUpdate.setStatut("Accepte");
             reservationDAO.save(reservationToUpdate);
