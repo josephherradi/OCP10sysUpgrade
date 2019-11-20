@@ -16,4 +16,8 @@ public interface PretDAO extends JpaRepository<Pret,Integer> {
 
     @Query("select p from Pret p where p.nomLivre= :nom")
     Optional <List<Pret>> findByLivre(@Param("nom") String livre);
+
+    @Query("select p from Pret p where p.nomLivre= :nom and p.utilisateur= :userId and p.rendu = false")
+    Optional <List<Pret>> FindByLivreAndUser(@Param("nom") String livre, @Param("userId") String utilisateur);
+
 }
