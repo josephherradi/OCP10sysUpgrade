@@ -43,6 +43,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public @ResponseBody List<Reservation> utilisateurReservations(String utilisateur) {
         List<Reservation> userResas=reservationDAO.findByUtilisateur(utilisateur).orElse(null);
+        if (userResas!=null){
         ListIterator<Reservation> iterator=userResas.listIterator();
         while (iterator.hasNext()){
             Reservation r=iterator.next();
@@ -53,7 +54,7 @@ public class ReservationServiceImpl implements ReservationService {
                 r.setDateRetourPlusProche(pretBackPlustot.getDateRetour());
             }
             iterator.set(r);
-            }
+            }}
         return userResas;
     }
 

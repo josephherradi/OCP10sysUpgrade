@@ -29,7 +29,7 @@ public class ReservationsBatch {
     private String attachment;
 
     @Scheduled(cron = "*/10 * * * * *")
-    public void bookingBatch() throws Exception{
+    public void notifBatch() throws Exception{
 
         List<ReservationProjection> resasList=reservationDAO.customQuery();
         ReservationBean laReservation=new ReservationBean();
@@ -56,28 +56,24 @@ public class ReservationsBatch {
 
 
             mailSender.send(message);
-
             Reservation resa = reservationDAO.findById(r.getReservation_Id()).orElse(null);
             resa.setNotified(Boolean.TRUE);
-            resa.setStatut("Annule");
             reservationDAO.save(resa);
         }
 
+    }
+    @Scheduled(cron = "*/10 * * * * *")
 
+    public void  statuUpdate(){
+    List<Reservation> notifiedResas= reservationDAO.findNotified().orElse(null);
+    ListIterator<Reservation> iterator=notifiedResas.listIterator();
 
-        List<Integer> resaToStatutUpdate=pretDAO.resaToUpdate();
-        ListIterator<Integer> iterator2=resaToStatutUpdate.listIterator();
-        while (iterator.hasNext()){
-            Integer i= iterator2.next();
-            Reservation reservationToUpdate=reservationDAO.findById(i).orElse(null);
-            reservationToUpdate.setStatut("Accepte");
-            reservationDAO.save(reservationToUpdate);
+    while (iterator.hasNext()){
+        Reservation notifiedResa=iterator.next();
 
-        }
-
-
-
-
+        notifiedResa.setStatut("Annule");
+        reservationDAO.save(notifiedResa);
+    }
 
     }
 
