@@ -47,6 +47,9 @@
 				</tr>
 
 				<c:forEach var="userReservations" items="${userReservations}">
+				<c:url var="annulationLink" value="reservations/getResa">
+				<c:param name="reservationId" value="${userReservations.reservationId}" />
+                                                					</c:url>
 
 					<tr>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${userReservations.dateDemande}" /> </td>
@@ -54,6 +57,12 @@
 						<td>${userReservations.statut}</td>
 						<td>${userReservations.numListeAttente}</td>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${userReservations.dateRetourPlusProche}" /></td>
+
+						<c:if test="${userReservations.statut=='en attente'}" var="variable">
+
+                                                <td><a href="${annulationLink}">Annuler</a></td>
+
+                                                </c:if>
 
 
 					</tr>

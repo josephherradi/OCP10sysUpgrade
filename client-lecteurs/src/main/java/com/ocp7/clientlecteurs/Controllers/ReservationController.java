@@ -43,7 +43,23 @@ public class ReservationController {
 
     }
 
-}
+    @RequestMapping(value ="reservations/getResa", method =RequestMethod.GET)
+    public String getResa(@RequestParam("reservationId") int reservationId,Model model) {
+        ReservationBean laReservationBean=reservationMicroserviceProxy.getResa(reservationId);
+        model.addAttribute("laReservationBean",laReservationBean);
+    return "annuleResa-form";
+    }
+
+    @RequestMapping(value="reservations/annulResa",method = RequestMethod.POST)
+    public String annuleResa(@ModelAttribute ReservationBean laReservationBean){
+        reservationMicroserviceProxy.annuleRes(laReservationBean);
+        return "redirect:/userReservations";
+    }
+
+    }
+
+
+
 
 
 

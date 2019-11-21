@@ -24,6 +24,11 @@ public List<ReservationBean> userReservations(@RequestParam("utilisateur") Strin
 @GetMapping(value="livreReservations")
 public List<ReservationBean> livreReservations(@RequestParam("livre") String livre);
 
+@GetMapping(value ="reservations/getResa")
+public ReservationBean getResa(@RequestParam("reservationId") int reservationId);
+
+@PostMapping(value="reservations/annulResa")
+public void annuleRes(ReservationBean laReservation);
 
 
 }

@@ -48,9 +48,23 @@ public class ReservationController {
         String utilisateur = laReservation.getUtilisateur();
         List<Pret> pretsFoundBeforeResa = pretDAO.FindByLivreAndUser(livreDAO.findById(livreId).orElse(null).getNom(), utilisateur).orElse(null);
         List<Reservation> userBookResa= reservationDAO.findByLivreAndUserAndStatut(livreDAO.findById(livreId).orElse(null).getNom(), utilisateur,"en attente").orElse(null);
-        /*implémentation des règles de gestion pour pouvoir procéder à une réservatiob  */
+        Integer dispoLivre=livreDAO.findById(livreId).orElse(null).getDisponibilite();
+
+        /*implémentation des règles de gestion  */
+        /*
+        - La liste de réservation ne peut comporter qu’un maximum de personnes correspondant à 2x le nombre d’exemplaires de l’ouvrage.
+
+        - Il n’est pas possible pour un usager de réserver un ouvrage qu’il a déjà en cours d’emprunt
+
+        - Il n'est pas possible de procéder à plusieurs réservations du même livre
+
+        - La réservation n'est possible que si la disponibilité du livre est 0
+
+         */
+
+
         if (((resasBook == null) || ((resasBook.size() + 1) <= 2 * livreDAO.findById(livreId).orElse(null).getQuantite()))
-                &&(pretsFoundBeforeResa==null)&&(userBookResa==null)) {
+                &&(pretsFoundBeforeResa==null)&&(userBookResa==null)&&(dispoLivre==0)) {
 
             Reservation lareservation = reservationService.saveReservation(livreId, laReservation);
             return new ResponseEntity<Reservation>(laReservation, HttpStatus.CREATED);
@@ -69,5 +83,17 @@ public class ReservationController {
         return reservationService.livreReservations(livre);
     }
 
+    @RequestMapping(value ="reservations/getResa", method =RequestMethod.GET)
+    public Reservation getResa(@RequestParam("reservationId") int reservationId){
+        Reservation laReservation=reservationDAO.findById(reservationId).orElse(null);
+        return laReservation;
+    }
 
-}
+    @RequestMapping(value="reservations/annulResa",method = RequestMethod.POST)
+    public ResponseEntity<Reservation> annuleResa(@RequestBody Reservation laReservation){
+        laReservation.setStatut("Annule");
+        Reservation resa= reservationDAO.save(laReservation);
+        return new ResponseEntity<Reservation>(resa,HttpStatus.OK);
+    }
+    }
+
