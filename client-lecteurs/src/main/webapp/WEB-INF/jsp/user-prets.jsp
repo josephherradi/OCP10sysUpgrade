@@ -3,6 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:useBean id="now" class="java.util.Date" />
+
 
 
 <!DOCTYPE html>
@@ -82,7 +84,7 @@
 						<td>${tempPrets.rendu}</td>
 
 
-                    <c:if test="${tempPrets.pretProlonge==false && tempPrets.rendu==false}" var="variable">
+                    <c:if test="${tempPrets.pretProlonge==false && tempPrets.rendu==false && now<tempPrets.dateRetour}" var="variable">
 
 						<td><a href="${prolongationLink}">Prolongation</a></td>
 
@@ -93,6 +95,8 @@
 					</tr>
 				</c:forEach>
 			</table>
+
+			<fmt:formatDate var="today" value="${now}" pattern="yyyy-MM-dd" />
 
 		</div>
 	</div>
