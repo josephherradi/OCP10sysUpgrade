@@ -64,17 +64,18 @@ public class ReservationsBatch {
     }
     @Scheduled(cron = "*/10 * * * * *")
 
-    public void  statuUpdate(){
-    List<Reservation> notifiedResas= reservationDAO.findNotified().orElse(null);
-    ListIterator<Reservation> iterator=notifiedResas.listIterator();
+    public void  statuUpdate() {
+        List<Reservation> notifiedResas = reservationDAO.findNotified().orElse(null);
+        ListIterator<Reservation> iterator = notifiedResas.listIterator();
+        if (notifiedResas != null) {
+            while (iterator.hasNext()) {
+                Reservation notifiedResa = iterator.next();
 
-    while (iterator.hasNext()){
-        Reservation notifiedResa=iterator.next();
+                notifiedResa.setStatut("Annule");
+                reservationDAO.save(notifiedResa);
+            }
 
-        notifiedResa.setStatut("Annule");
-        reservationDAO.save(notifiedResa);
-    }
-
+        }
     }
 
 }
