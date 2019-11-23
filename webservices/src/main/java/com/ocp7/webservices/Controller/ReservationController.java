@@ -43,36 +43,10 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "livre/{livreId}/reservation/saveFormResa", method = RequestMethod.POST)
-    public ResponseEntity<Reservation> saveReservation(@PathVariable("livreId") int livreId, @RequestBody Reservation laReservation) {
-        List<Reservation> resasBook = reservationDAO.findByLivreAndStatut(livreDAO.findById(livreId).orElse(null).getNom(),"en attente").orElse(null);
-        String utilisateur = laReservation.getUtilisateur();
-        List<Pret> pretsFoundBeforeResa = pretDAO.FindByLivreAndUser(livreDAO.findById(livreId).orElse(null).getNom(), utilisateur).orElse(null);
-        List<Reservation> userBookResa= reservationDAO.findByLivreAndUserAndStatut(livreDAO.findById(livreId).orElse(null).getNom(), utilisateur,"en attente").orElse(null);
-        Integer dispoLivre=livreDAO.findById(livreId).orElse(null).getDisponibilite();
-
-        /*implémentation des règles de gestion  */
-        /*
-        - La liste de réservation ne peut comporter qu’un maximum de personnes correspondant à 2x le nombre d’exemplaires de l’ouvrage.
-
-        - Il n’est pas possible pour un usager de réserver un ouvrage qu’il a déjà en cours d’emprunt
-
-        - Il n'est pas possible de procéder à plusieurs réservations du même livre
-
-        - La réservation n'est possible que si la disponibilité du livre est 0
-
-         */
-
-
-        if (((resasBook == null) || ((resasBook.size() + 1) <= 2 * livreDAO.findById(livreId).orElse(null).getQuantite()))
-                &&(pretsFoundBeforeResa==null)&&(userBookResa==null)&&(dispoLivre==0)) {
-
-            Reservation lareservation = reservationService.saveReservation(livreId, laReservation);
-            return new ResponseEntity<Reservation>(laReservation, HttpStatus.CREATED);
-        } else
-            throw new ImpossibleAjouterReservationException("Reservation impossible, merci de verifier les conditions de reservations");
-
+    public ResponseEntity saveReservation(@PathVariable("livreId") int livreId, @RequestBody Reservation laReservation) {
+        reservationService.saveReservation(livreId, laReservation);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
-
     @RequestMapping(value = "userReservations", method = RequestMethod.GET)
     public List<Reservation> userReservations(String utilisateur) {
         return reservationService.utilisateurReservations(utilisateur);

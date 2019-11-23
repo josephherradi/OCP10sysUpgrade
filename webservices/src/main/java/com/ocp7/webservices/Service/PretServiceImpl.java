@@ -1,19 +1,22 @@
 package com.ocp7.webservices.Service;
 
+import com.ocp7.webservices.Controller.exceptions.ImpossibleAjouterPretException;
+import com.ocp7.webservices.DAO.LivreDAO;
 import com.ocp7.webservices.DAO.PretDAO;
+import com.ocp7.webservices.Modele.Livre;
 import com.ocp7.webservices.Modele.Pret;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PretServiceImpl implements PretService {
     @Autowired
     private PretDAO pretDAO;
 
+    @Autowired
+    private LivreDAO livreDAO;
 
     @Override
     public List<Pret> listePrets() {
@@ -21,10 +24,40 @@ public class PretServiceImpl implements PretService {
     }
 
     @Override
-    public Pret savePret(Pret lePret) {
-        return pretDAO.save(lePret);
+    public void savePret(Pret lePret) {
+
+        Date datVar=new Date();
+        lePret.setDatePret(datVar);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(datVar);
+        cal.add(Calendar.WEEK_OF_MONTH,4);
+        lePret.setDateRetour(cal.getTime());
+        /* nouveau pret  */
+        if( lePret.getTagForUpdate().equals(Boolean.FALSE) && ((livreDAO.findById(lePret.getIdLivre()).orElse(null).getDisponibilite()!=0))){
+            Livre leLivre=livreDAO.findById(lePret.getIdLivre()).orElse(null);
+            leLivre.setDisponibilite(leLivre.getDisponibilite()-1);
+            lePret.setDateRetour(cal.getTime());
+            lePret.setRendu(Boolean.FALSE);
+            livreDAO.save(leLivre);
+            pretDAO.save(lePret);
+
+        }
+        /* retour pret */
+
+        if(lePret.getTagForUpdate().equals(Boolean.TRUE)&&lePret.getRendu().equals(Boolean.TRUE)){
+            Livre leLivre=livreDAO.findById(lePret.getIdLivre()).orElse(null);
+            leLivre.setDisponibilite(leLivre.getDisponibilite()+1);
+            livreDAO.save(leLivre);
+            lePret.setRendu(Boolean.TRUE);
+            lePret.setDateRetour(new Date());
+            pretDAO.save(lePret);
+
+        }
+        if(lePret==null || (livreDAO.findById(lePret.getIdLivre()).orElse(null)).getDisponibilite()==0) throw new ImpossibleAjouterPretException("Impossible d'ajouter ce pret");
+
 
     }
+
 
     @Override
     public Pret get(int theId) {
