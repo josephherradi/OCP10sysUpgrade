@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -31,23 +32,27 @@ public class ProlongationController {
     }
 
     @RequestMapping(value = "pret/{pretId}/prolongation/saveFormProlo",method =RequestMethod.POST)
-    public ResponseEntity<Prolongation> saveProlongation(@PathVariable("pretId") int pretId, @RequestBody Prolongation laProlongation){
-        Pret lePret=pretService.get(pretId);
-        if(laProlongation.getStatut().equalsIgnoreCase("Validee")&&lePret.getPretProlonge().equals(Boolean.FALSE)&&lePret.getRendu().equals(Boolean.FALSE)){
+    public ResponseEntity<Prolongation> saveProlongation(@PathVariable("pretId") int pretId, @RequestBody Prolongation laProlongation) {
+        Pret lePret = pretService.get(pretId);
+        if (laProlongation.getStatut().equalsIgnoreCase("Validee") && lePret.getPretProlonge().equals(Boolean.FALSE) && lePret.getRendu().equals(Boolean.FALSE)) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(lePret.getDateRetour());
-            cal.add(Calendar.WEEK_OF_MONTH,4);
+            cal.add(Calendar.WEEK_OF_MONTH, 4);
             lePret.setDateRetour(cal.getTime());
             lePret.setPretProlonge(Boolean.TRUE);
             pretService.savePret(lePret);
         }
+        if ((new Date()).before(lePret.getDateRetour())) {
+            Prolongation newProlongation = prolongationService.saveProlongation(pretId, laProlongation);
 
-        Prolongation newProlongation=prolongationService.saveProlongation(pretId,laProlongation);
-
-        if(laProlongation==null || lePret.getRendu().equals(Boolean.TRUE)) throw new ImpossibleAjouterProlongationException("Erreur, impossible d'ajouter cette prolongation");
-        return new ResponseEntity<Prolongation>(newProlongation, HttpStatus.CREATED);
-
+            if (laProlongation == null || lePret.getRendu().equals(Boolean.TRUE) || (new Date()).after(lePret.getDateRetour()))
+                throw new ImpossibleAjouterProlongationException("Erreur, impossible d'ajouter cette prolongation");
+            return new ResponseEntity<Prolongation>(newProlongation, HttpStatus.CREATED);
+        } else
+    return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
+
+
 
     @RequestMapping(value = "userprolongations",method = RequestMethod.GET)
     public List<Prolongation> userProlongations(String utilisateur){
