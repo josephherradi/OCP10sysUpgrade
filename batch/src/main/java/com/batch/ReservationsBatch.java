@@ -66,8 +66,8 @@ public class ReservationsBatch {
 
     public void  statuUpdate() {
         List<Reservation> notifiedResas = reservationDAO.findNotified().orElse(null);
-        ListIterator<Reservation> iterator = notifiedResas.listIterator();
         if (notifiedResas != null) {
+            ListIterator<Reservation> iterator = notifiedResas.listIterator();
             while (iterator.hasNext()) {
                 Reservation notifiedResa = iterator.next();
 
