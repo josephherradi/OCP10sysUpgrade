@@ -74,7 +74,7 @@ public class ReservationServiceImpl implements ReservationService {
          public  void checkSizeQueueList(Integer qteLivre, List<Reservation> resasBook)throws FunctionalException{
 
             if((resasBook.size() + 1) > 2 * qteLivre){
-               throw new FunctionalException("Liste d'attente compète");
+               throw new FunctionalException("Liste d'attente complète");
             }
          }
 

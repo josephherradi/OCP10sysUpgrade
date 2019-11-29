@@ -1,5 +1,6 @@
 package com.ocp7.webservices.Service;
 
+import com.ocp7.webservices.Controller.exceptions.FunctionalException;
 import com.ocp7.webservices.Controller.exceptions.ImpossibleAjouterProlongationException;
 import com.ocp7.webservices.DAO.PretDAO;
 import com.ocp7.webservices.DAO.ProlongationDAO;
@@ -32,23 +33,42 @@ public class ProlongationServiceImpl implements ProlongationService {
 
         Pret lePret=pretDAO.findById(preId).orElse(null);
 
-        if (laProlongation.getStatut().equalsIgnoreCase("Validee") && lePret.getPretProlonge().equals(Boolean.FALSE) && lePret.getRendu().equals(Boolean.FALSE)) {
+
+        laProlongation.setPretId(preId);
+        laProlongation.setNomLivre(pretDAO.findById(preId).orElse(null).getNomLivre());
+
+        if(laProlongation.getStatut().equalsIgnoreCase("Validee")){
             Calendar cal = Calendar.getInstance();
             cal.setTime(lePret.getDateRetour());
             cal.add(Calendar.WEEK_OF_MONTH, 4);
             lePret.setDateRetour(cal.getTime());
             lePret.setPretProlonge(Boolean.TRUE);
+            this.checkPretAndProlongation(lePret,laProlongation);
             pretDAO.save(lePret);
         }
-        laProlongation.setPretId(preId);
-        laProlongation.setNomLivre(pretDAO.findById(preId).orElse(null).getNomLivre());
-        if ((new Date()).before(lePret.getDateRetour())) {
-            prolongationDAO.save(laProlongation);
-        }
-        if (laProlongation == null || lePret.getRendu().equals(Boolean.TRUE) || (new Date()).after(lePret.getDateRetour()))
-            throw new ImpossibleAjouterProlongationException("Erreur, impossible d'ajouter cette prolongation");
+        this.checkDateProlongationPret(lePret);
+        prolongationDAO.save(laProlongation);
+
     }
 
+    public void checkPretAndProlongation(Pret lePret,Prolongation laProlongation) throws FunctionalException{
+
+
+        if(laProlongation ==null){
+            throw new ImpossibleAjouterProlongationException("Impossible d'ajouter cette prolongation");
+        }
+        if(lePret.getPretProlonge().equals(Boolean.FALSE)){
+            throw new FunctionalException("Ce prêt n'a pas été prolongé");
+        }
+        if(lePret.getRendu().equals(Boolean.TRUE)){
+            throw new FunctionalException("Ce prêt est déjà rendu");
+        }
+        }
+    public  void checkDateProlongationPret(Pret lePret){
+        if((new Date()).after(lePret.getDateRetour())){
+            throw new FunctionalException("Impossible de faire une prolongation après la date de retour");
+        }
+    }
 
     @Override
     public Prolongation getProlongation(int id) {

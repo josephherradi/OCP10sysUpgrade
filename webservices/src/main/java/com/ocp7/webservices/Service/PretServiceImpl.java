@@ -1,5 +1,6 @@
 package com.ocp7.webservices.Service;
 
+import com.ocp7.webservices.Controller.exceptions.FunctionalException;
 import com.ocp7.webservices.Controller.exceptions.ImpossibleAjouterPretException;
 import com.ocp7.webservices.DAO.LivreDAO;
 import com.ocp7.webservices.DAO.PretDAO;
@@ -26,14 +27,20 @@ public class PretServiceImpl implements PretService {
     @Override
     public void savePret(Pret lePret) {
 
-        Date datVar=new Date();
-        lePret.setDatePret(datVar);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(datVar);
-        cal.add(Calendar.WEEK_OF_MONTH,4);
-        lePret.setDateRetour(cal.getTime());
+
+
+        Boolean tagNewPret=lePret.getTagForUpdate().equals(Boolean.FALSE);
+
         /* nouveau pret  */
-        if( lePret.getTagForUpdate().equals(Boolean.FALSE) && ((livreDAO.findById(lePret.getIdLivre()).orElse(null).getDisponibilite()!=0))){
+        if( tagNewPret){
+            this.checkDispoLivre(lePret);
+            Date datVar=new Date();
+            lePret.setDatePret(datVar);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(datVar);
+            cal.add(Calendar.WEEK_OF_MONTH,4);
+            lePret.setDateRetour(cal.getTime());
+
             Livre leLivre=livreDAO.findById(lePret.getIdLivre()).orElse(null);
             leLivre.setDisponibilite(leLivre.getDisponibilite()-1);
             lePret.setDateRetour(cal.getTime());
@@ -42,22 +49,34 @@ public class PretServiceImpl implements PretService {
             pretDAO.save(lePret);
 
         }
-        /* retour pret */
 
-        if(lePret.getTagForUpdate().equals(Boolean.TRUE)&&lePret.getRendu().equals(Boolean.TRUE)){
+        /* retour pret */
+        Boolean tagUpdate= lePret.getTagForUpdate().equals(Boolean.TRUE);
+        Boolean tagRendu=  lePret.getRendu().equals(Boolean.TRUE);
+
+
+        if(tagUpdate && tagRendu){
             Livre leLivre=livreDAO.findById(lePret.getIdLivre()).orElse(null);
-            leLivre.setDisponibilite(leLivre.getDisponibilite()+1);
-            livreDAO.save(leLivre);
-            lePret.setRendu(Boolean.TRUE);
+            Integer livreDispoAvant=leLivre.getDisponibilite();
+            leLivre.setDisponibilite(livreDispoAvant+1);
             lePret.setDateRetour(new Date());
             pretDAO.save(lePret);
+            livreDAO.save(leLivre);
+
 
         }
-        if(lePret==null || (livreDAO.findById(lePret.getIdLivre()).orElse(null)).getDisponibilite()==0) throw new ImpossibleAjouterPretException("Impossible d'ajouter ce pret");
-
 
     }
 
+    public void checkDispoLivre(Pret lePret) throws  FunctionalException{
+        Integer dispoLivre=livreDAO.findById(lePret.getIdLivre()).orElse(null).getDisponibilite();
+        Boolean tagNewPret=lePret.getTagForUpdate().equals(Boolean.FALSE);
+        if(tagNewPret&&dispoLivre==0){
+            throw new FunctionalException("Auncun livre n'est disponible pour le prêt");
+        }
+
+
+    }
 
     @Override
     public Pret get(int theId) {
