@@ -30,21 +30,13 @@ public class PretServiceImpl implements PretService {
 
 
         Boolean tagNewPret=lePret.getTagForUpdate().equals(Boolean.FALSE);
+        Livre leLivre=livreDAO.findById(lePret.getIdLivre()).orElse(null);
+
 
         /* nouveau pret  */
         if( tagNewPret){
             this.checkDispoLivre(lePret);
-            Date datVar=new Date();
-            lePret.setDatePret(datVar);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(datVar);
-            cal.add(Calendar.WEEK_OF_MONTH,4);
-            lePret.setDateRetour(cal.getTime());
-
-            Livre leLivre=livreDAO.findById(lePret.getIdLivre()).orElse(null);
-            leLivre.setDisponibilite(leLivre.getDisponibilite()-1);
-            lePret.setDateRetour(cal.getTime());
-            lePret.setRendu(Boolean.FALSE);
+            this.nouveauPretProcessing(lePret,leLivre);
             livreDAO.save(leLivre);
             pretDAO.save(lePret);
 
@@ -56,10 +48,7 @@ public class PretServiceImpl implements PretService {
 
 
         if(tagUpdate && tagRendu){
-            Livre leLivre=livreDAO.findById(lePret.getIdLivre()).orElse(null);
-            Integer livreDispoAvant=leLivre.getDisponibilite();
-            leLivre.setDisponibilite(livreDispoAvant+1);
-            lePret.setDateRetour(new Date());
+            this.retourPretProcessing(lePret,leLivre);
             pretDAO.save(lePret);
             livreDAO.save(leLivre);
 
@@ -74,8 +63,24 @@ public class PretServiceImpl implements PretService {
         if(tagNewPret&&dispoLivre==0){
             throw new FunctionalException("Auncun livre n'est disponible pour le prêt");
         }
+    }
 
+    public void nouveauPretProcessing(Pret lePret, Livre leLivre){
+        Date datVar=new Date();
+        lePret.setDatePret(datVar);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(datVar);
+        cal.add(Calendar.WEEK_OF_MONTH,4);
+        lePret.setDateRetour(cal.getTime());
+        leLivre.setDisponibilite(leLivre.getDisponibilite()-1);
+        lePret.setDateRetour(cal.getTime());
+        lePret.setRendu(Boolean.FALSE);
+    }
 
+    public void retourPretProcessing(Pret lePret, Livre leLivre){
+        Integer livreDispoAvant=leLivre.getDisponibilite();
+        leLivre.setDisponibilite(livreDispoAvant+1);
+        lePret.setDateRetour(new Date());
     }
 
     @Override

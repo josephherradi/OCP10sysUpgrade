@@ -17,9 +17,7 @@ import java.util.List;
 public class ProlongationServiceImpl implements ProlongationService {
     @Autowired
     private ProlongationDAO prolongationDAO;
-
-
-
+    
     @Autowired
     private PretDAO pretDAO;
 
@@ -32,19 +30,15 @@ public class ProlongationServiceImpl implements ProlongationService {
     public void saveProlongation(Integer preId, Prolongation laProlongation) {
 
         Pret lePret=pretDAO.findById(preId).orElse(null);
-
-
-        laProlongation.setPretId(preId);
-        laProlongation.setNomLivre(pretDAO.findById(preId).orElse(null).getNomLivre());
+        String nomLivre=lePret.getNomLivre();
+        laProlongation.setPretId(lePret.getId());
+        laProlongation.setNomLivre(nomLivre);
 
         if(laProlongation.getStatut().equalsIgnoreCase("Validee")){
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(lePret.getDateRetour());
-            cal.add(Calendar.WEEK_OF_MONTH, 4);
-            lePret.setDateRetour(cal.getTime());
-            lePret.setPretProlonge(Boolean.TRUE);
+            this.prolongationProcessing(lePret,laProlongation);
             this.checkPretAndProlongation(lePret,laProlongation);
             pretDAO.save(lePret);
+            prolongationDAO.save(laProlongation);
         }
         this.checkDateProlongationPret(lePret);
         prolongationDAO.save(laProlongation);
@@ -70,6 +64,13 @@ public class ProlongationServiceImpl implements ProlongationService {
         }
     }
 
+    public  void prolongationProcessing(Pret lePret,Prolongation laProlongation){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(lePret.getDateRetour());
+        cal.add(Calendar.WEEK_OF_MONTH, 4);
+        lePret.setDateRetour(cal.getTime());
+        lePret.setPretProlonge(Boolean.TRUE);
+    }
     @Override
     public Prolongation getProlongation(int id) {
         return prolongationDAO.findById(id).orElse(null);
