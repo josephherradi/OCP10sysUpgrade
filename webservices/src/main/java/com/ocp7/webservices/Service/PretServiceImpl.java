@@ -75,6 +75,7 @@ public class PretServiceImpl implements PretService {
         leLivre.setDisponibilite(leLivre.getDisponibilite()-1);
         lePret.setDateRetour(cal.getTime());
         lePret.setRendu(Boolean.FALSE);
+        lePret.setTagForUpdate(Boolean.TRUE);
     }
 
     public void retourPretProcessing(Pret lePret, Livre leLivre){

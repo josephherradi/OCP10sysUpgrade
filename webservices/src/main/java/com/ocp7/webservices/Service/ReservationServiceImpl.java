@@ -125,6 +125,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public @ResponseBody List<Reservation> livreReservations(String livre) {
-        return reservationDAO.findByLivre(livre).orElse(null);
+        return reservationDAO.findByLivreAndStatut(livre,"en attente").orElse(null);
     }
 }

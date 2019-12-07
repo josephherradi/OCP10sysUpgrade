@@ -54,7 +54,6 @@ public class PretController {
     @GetMapping(value = "updateFormPret")
     public Pret showFormForUpdate(@RequestParam("pretId") int id){
         Pret lePret=pretService.get(id);
-        lePret.setTagForUpdate(Boolean.TRUE);
         if(lePret==null) throw new PretNotFoundException("Ce pret n'existe pas");
         return lePret;
     }
