@@ -45,43 +45,15 @@ public class PretController {
     }
 
     @PostMapping(value = "saveFormPret")
-    public ResponseEntity<Pret> savePret(@RequestBody Pret lePret){
-        Date datVar=new Date();
-        lePret.setDatePret(datVar);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(datVar);
-        cal.add(Calendar.WEEK_OF_MONTH,4);
-        lePret.setDateRetour(cal.getTime());
-        if( lePret.getTagForUpdate().equals(Boolean.FALSE) && (livreService.get(lePret.getIdLivre())).getDisponibilite()!=0){
-        Livre leLivre=livreService.get(lePret.getIdLivre());
-        leLivre.setDisponibilite(leLivre.getDisponibilite()-1);
-        lePret.setDateRetour(cal.getTime());
-        lePret.setRendu(Boolean.FALSE);
-        livreService.saveLivre(leLivre);
+    public ResponseEntity savePret(@RequestBody Pret lePret){
         pretService.savePret(lePret);
-
-        }
-
-        if(lePret.getTagForUpdate().equals(Boolean.TRUE)&&lePret.getRendu().equals(Boolean.TRUE)){
-            Livre leLivre=livreService.get(lePret.getIdLivre());
-            leLivre.setDisponibilite(leLivre.getDisponibilite()+1);
-            livreService.saveLivre(leLivre);
-            lePret.setRendu(Boolean.TRUE);
-            lePret.setDateRetour(new Date());
-            pretService.savePret(lePret);
-
-        }
-        if(lePret==null || (livreService.get(lePret.getIdLivre())).getDisponibilite()==0) throw new ImpossibleAjouterPretException("Impossible d'ajouter ce pret");
-
-
-        return new ResponseEntity<Pret>(lePret, HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.OK);
 
     }
 
     @GetMapping(value = "updateFormPret")
     public Pret showFormForUpdate(@RequestParam("pretId") int id){
         Pret lePret=pretService.get(id);
-        lePret.setTagForUpdate(Boolean.TRUE);
         if(lePret==null) throw new PretNotFoundException("Ce pret n'existe pas");
         return lePret;
     }
@@ -105,4 +77,9 @@ public class PretController {
         return lePret;
     }
 
+    @GetMapping(value = "pretRetourPlusProche")
+    public Pret pretBackPlusTot(@RequestParam("livre") String livre){
+        return pretService.pretRetourPlusProche(livre);
+
+    }
 }
