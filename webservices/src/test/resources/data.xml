@@ -1,0 +1,4 @@
+<dataset>
+<Livre livre_id="1" description="test" disponibilite="1" nom="TEST" categorie="TEST" quantite="4"/>
+<Livre livre_id="17" description="test" disponibilite="0" nom="TEST" categorie="TEST" quantite="4"/>
+</dataset>
