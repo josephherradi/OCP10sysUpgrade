@@ -107,7 +107,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     @Override
-    public @ResponseBody List<Reservation> utilisateurReservations(String utilisateur) {
+    public  List<Reservation> utilisateurReservations(String utilisateur) {
         List<Reservation> userResas=reservationDAO.findByUtilisateur(utilisateur).orElse(null);
         if (userResas!=null){
         ListIterator<Reservation> iterator=userResas.listIterator();
@@ -125,7 +125,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public @ResponseBody List<Reservation> livreReservations(String livre) {
+    public  List<Reservation> livreReservations(String livre) {
         return reservationDAO.findByLivreAndStatut(livre,"en attente").orElse(null);
     }
 }
