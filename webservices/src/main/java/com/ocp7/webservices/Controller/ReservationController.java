@@ -45,8 +45,9 @@ public class ReservationController {
     @RequestMapping(value = "livre/{livreId}/reservation/saveFormResa", method = RequestMethod.POST)
     public ResponseEntity saveReservation(@PathVariable("livreId") int livreId, @RequestBody Reservation laReservation) {
         reservationService.saveReservation(livreId, laReservation);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(laReservation, HttpStatus.CREATED);
     }
+
     @RequestMapping(value = "userReservations", method = RequestMethod.GET)
     public List<Reservation> userReservations(String utilisateur) {
         return reservationService.utilisateurReservations(utilisateur);
@@ -57,17 +58,22 @@ public class ReservationController {
         return reservationService.livreReservations(livre);
     }
 
-    @RequestMapping(value ="reservations/getResa", method =RequestMethod.GET)
-    public Reservation getResa(@RequestParam("reservationId") int reservationId){
-        Reservation laReservation=reservationDAO.findById(reservationId).orElse(null);
+    @RequestMapping(value = "reservations/getResa", method = RequestMethod.GET)
+    public Reservation getResa(@RequestParam("reservationId") int reservationId) {
+        Reservation laReservation = reservationDAO.findById(reservationId).orElse(null);
         return laReservation;
     }
 
-    @RequestMapping(value="reservations/annulResa",method = RequestMethod.POST)
-    public ResponseEntity<Reservation> annuleResa(@RequestBody Reservation laReservation){
+    @RequestMapping(value = "reservations/annulResa", method = RequestMethod.POST)
+    public ResponseEntity<Reservation> annuleResa(@RequestBody Reservation laReservation) {
         laReservation.setStatut("Annule");
-        Reservation resa= reservationDAO.save(laReservation);
-        return new ResponseEntity<Reservation>(resa,HttpStatus.OK);
+        Reservation resa = reservationDAO.save(laReservation);
+        return new ResponseEntity<Reservation>(resa, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "deleteResa", method = RequestMethod.GET)
+    public void delete(@RequestParam("resaId") int id) {reservationDAO.deleteById(id);
     }
+}
+
 

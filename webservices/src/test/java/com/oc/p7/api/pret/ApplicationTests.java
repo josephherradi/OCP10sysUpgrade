@@ -149,10 +149,13 @@ public class ApplicationTests {
     public void prolongationProcessing() throws ParseException {
         Pret lePret = new Pret();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-        Date d = sdf.parse("2019/11/15");
-        lePret.setDateRetour(d);
+        Date d1 = sdf.parse("2019/11/15");
+        Date d2 = sdf.parse("2019/12/13");
+        lePret.setDateRetour(d1);
         prolongationServiceImpl.prolongationProcessing(lePret);
         Assert.isTrue(lePret.getPretProlonge() == Boolean.TRUE, "Flag non maj");
+        Assert.isTrue(lePret.getDateRetour().compareTo(d2)==0, "erreur maj date retour");
+
     }
 
     @Test

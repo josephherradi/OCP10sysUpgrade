@@ -34,7 +34,7 @@ public class ProlongationController {
     @RequestMapping(value = "pret/{pretId}/prolongation/saveFormProlo",method =RequestMethod.POST)
     public ResponseEntity saveProlongation(@PathVariable("pretId") int pretId, @RequestBody Prolongation laProlongation) {
         prolongationService.saveProlongation(pretId, laProlongation);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(laProlongation,HttpStatus.CREATED);
     }
 
 
@@ -55,5 +55,9 @@ public class ProlongationController {
         Prolongation laProlongation=prolongationService.getProlongation(prolongationId);
         if(laProlongation==null) throw new ProlongationNotFoundException("cette prolongation n'existe pas");
         return laProlongation;
+    }
+    @RequestMapping(value = "deleteProlo", method = RequestMethod.GET)
+    public void delete(@RequestParam("proloId") int id) {
+        prolongationService.delete(id);
     }
 }
