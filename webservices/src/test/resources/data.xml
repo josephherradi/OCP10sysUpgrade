@@ -1,0 +1,15 @@
+<dataset>
+<Livre livre_id="1" description="test" disponibilite="1" nom="test1" categorie="TEST" quantite="4"/>
+<Livre livre_id="17" description="test" disponibilite="0" nom="test2" categorie="TEST" quantite="4"/>
+<Livre livre_id="3" description="test" disponibilite="1" nom="test3" categorie="TEST" quantite="3"/>
+<Pret id="1" date_pret="2019-11-01" id_livre="1" pret_prolonge="true" utilisateur="Test4" nom_livre="test1" tag_for_update="false" date_retour="2020-01-01" rendu="false"/>
+<Pret id="2" date_pret="2019-12-01" id_livre="17" pret_prolonge="false" utilisateur="Test5" nom_livre="test2" tag_for_update="false" date_retour="2020-05-01" rendu="false"/>
+<Pret id="3" date_pret="2019-12-01" id_livre="3" pret_prolonge="true" utilisateur="Test6" nom_livre="test2" tag_for_update="false" date_retour="2020-01-01" rendu="false"/>
+<Prolongation prolongation_id="1" date_demande="2019-11-01" statut="en attente" utilisateur="test1" pret_id="1" nom_livre="test1"/>
+<Prolongation prolongation_id="2" date_demande="2019-12-01" statut="validee" utilisateur="test1" pret_id="2" nom_livre="test2"/>
+<Prolongation prolongation_id="3" date_demande="2019-09-01" statut="validee" utilisateur="test3" pret_id="3" nom_livre="test2"/>
+<Reservation reservation_id="1" date_demande="2019-12-10" livre="test2" statut="en attente" utilisateur="LecteurTest" num_liste_attente="1" notified="false"/>
+<Reservation reservation_id="2" date_demande="2019-12-11" livre="test2" statut="en attente" utilisateur="UserTest" num_liste_attente="2" notified="false"/>
+<Reservation reservation_id="3" date_demande="2019-12-12" livre="test2" statut="en attente" utilisateur="Test3" num_liste_attente="3" notified="false"/>
+<Reservation reservation_id="4" date_demande="2019-11-30" livre="test3" statut="en attente" utilisateur="Test3" num_liste_attente="2" notified="false"/>
+</dataset>

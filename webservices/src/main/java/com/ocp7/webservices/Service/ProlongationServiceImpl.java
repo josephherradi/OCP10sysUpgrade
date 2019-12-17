@@ -35,7 +35,7 @@ public class ProlongationServiceImpl implements ProlongationService {
         laProlongation.setNomLivre(nomLivre);
 
         if(laProlongation.getStatut().equalsIgnoreCase("Validee")){
-            this.prolongationProcessing(lePret,laProlongation);
+            this.prolongationProcessing(lePret);
             this.checkPretAndProlongation(lePret,laProlongation);
             pretDAO.save(lePret);
             prolongationDAO.save(laProlongation);
@@ -64,7 +64,7 @@ public class ProlongationServiceImpl implements ProlongationService {
         }
     }
 
-    public  void prolongationProcessing(Pret lePret,Prolongation laProlongation){
+    public  void prolongationProcessing(Pret lePret){
         Calendar cal = Calendar.getInstance();
         cal.setTime(lePret.getDateRetour());
         cal.add(Calendar.WEEK_OF_MONTH, 4);
@@ -83,7 +83,7 @@ public class ProlongationServiceImpl implements ProlongationService {
     }
 
     @Override
-    public @ResponseBody List<Prolongation> userProlongation(String utilisateur) {
+    public  List<Prolongation> userProlongation(String utilisateur) {
         return prolongationDAO.findByUtilisateur(utilisateur).orElse(null);
     }
 }

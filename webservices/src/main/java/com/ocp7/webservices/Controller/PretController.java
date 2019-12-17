@@ -47,7 +47,7 @@ public class PretController {
     @PostMapping(value = "saveFormPret")
     public ResponseEntity savePret(@RequestBody Pret lePret){
         pretService.savePret(lePret);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(lePret,HttpStatus.OK);
 
     }
 
