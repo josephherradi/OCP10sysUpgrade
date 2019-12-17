@@ -1,28 +1,8 @@
-# Projet de système d'information d'une bibliotheque
-La solution technique proposée comprend:
-* Une API Rest qui implémente la logique métier, l'accès et la lecture des données et le routage URI.
-* Un client à destination des lecteurs.
-* Un client "Admin" à destination des emloyés de la bibliotheque.
-* Un batch pour la planification des mails de relance en cas de retard.
-
-
-
-## Tehnologies utilisées:
-* JDK 8
-* Spring Boot 2
-* Spring Boot data jpa
-* Spring Cloud security
-* Spring Cloud openFeign 2
-* Spring Boot Batch
-* Spring Boot mail
-* Maven
-* mySQL 5.6.41 (login: root, pwd=root)
-* IntelliJ 2018.2
-* Bootstrap 3.3.7
-* JSTL 1.2
-* JSP  2.3
-* Apache Tomcat (embeded & 9.0.19)
-
+# Améliorez le système d’information de la bibliothèque
+Les développements effectués concernent tickets suivants ouverts par le tech Lead:
+* Ajoutez un système de réservation d’ouvrages (par le client)
+* Bug dans la gestion des prolongations de prêt
+* Mettez en place une stratégie de tests
 
 
 ## Lancer les modules à l'aide du plugin Maven
@@ -74,8 +54,8 @@ Pour consulter la liste des livres au format JSON
 http://localhost:9092/livres
 ```
 Rest Api Spring security basic authentication :
-login=utilisateur
-pwd=mdp
+login= utilisateur
+pwd= mdp
 
 Le client lecteurs est accessible à:
 
